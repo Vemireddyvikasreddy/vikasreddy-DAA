@@ -1,0 +1,35 @@
+import heapq
+
+def maxProbability(n, edges, succProb, start, end):
+    # Build graph with adjacency list where each node points to a list of (neighbor, probability)
+    graph = {i: [] for i in range(n)}
+    for i, (a, b) in enumerate(edges):
+        graph[a].append((b, succProb[i]))
+        graph[b].append((a, succProb[i]))
+
+    # Max-heap to store the current node and the probability of reaching it (negative for max-heap)
+    heap = [(-1.0, start)]  # Starting probability is 1 (100%)
+    probabilities = [0] * n  # To store the max probability to reach each node
+    probabilities[start] = 1.0  # Starting node has a probability of 1
+    
+    while heap:
+        prob, node = heapq.heappop(heap)
+        prob = -prob  # Convert back to positive probability
+        
+        # If we reach the end node, return the probability
+        if node == end:
+            return prob
+        
+        # Explore neighbors
+        for neighbor, edge_prob in graph[node]:
+            new_prob = prob * edge_prob
+            if new_prob > probabilities[neighbor]:  # Only consider better paths
+                probabilities[neighbor] = new_prob
+                heapq.heappush(heap, (-new_prob, neighbor))  # Push with negative probability for max-heap
+
+    # If we reach here, there is no path from start to end
+    return 0.0
+
+# Example test cases
+print(maxProbability(3, [[0, 1], [1, 2], [0, 2]], [0.5, 0.5, 0.2], 0, 2))  # Output: 0.25000
+print(maxProbability(3, [[0, 1], [1, 2], [0, 2]], [0.5, 0.5, 0.3], 0, 2))  # Output: 0.30000
