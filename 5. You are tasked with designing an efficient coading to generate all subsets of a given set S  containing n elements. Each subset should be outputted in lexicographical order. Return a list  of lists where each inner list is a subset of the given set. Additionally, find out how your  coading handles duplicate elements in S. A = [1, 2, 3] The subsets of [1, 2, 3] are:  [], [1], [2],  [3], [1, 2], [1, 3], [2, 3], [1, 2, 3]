@@ -1,0 +1,28 @@
+def subsetsWithDup(S):
+    # Step 1: Sort the input list to handle lexicographical order and duplicates.
+    S.sort()
+    
+    # Step 2: Define a helper function for backtracking.
+    def backtrack(start, path):
+        # Add the current subset (path) to the result list.
+        result.append(path)
+        
+        # Iterate over the elements, starting from the 'start' index.
+        for i in range(start, len(S)):
+            # Skip duplicates: if the current element is the same as the previous one, 
+            # skip it to avoid generating duplicate subsets.
+            if i > start and S[i] == S[i - 1]:
+                continue
+            # Include the current element and move to the next index.
+            backtrack(i + 1, path + [S[i]])
+
+    # Step 3: Initialize the result list and start the backtracking process.
+    result = []
+    backtrack(0, [])
+    return result
+
+# Example Input:
+A = [1, 2, 3]
+
+# Call the function and print the result
+print(subsetsWithDup(A))
