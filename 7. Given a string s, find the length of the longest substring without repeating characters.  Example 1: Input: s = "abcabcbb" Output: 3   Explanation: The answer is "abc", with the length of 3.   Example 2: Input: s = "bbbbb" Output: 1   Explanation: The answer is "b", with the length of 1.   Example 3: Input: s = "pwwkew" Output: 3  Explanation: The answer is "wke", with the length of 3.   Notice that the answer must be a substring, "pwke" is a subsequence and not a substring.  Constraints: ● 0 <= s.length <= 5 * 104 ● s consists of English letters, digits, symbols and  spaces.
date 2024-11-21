@@ -1,0 +1,19 @@
+def length_of_longest_substring(s: str) -> int:
+    char_set = set()  # To store characters in the current window
+    left = 0  # Left pointer of the window
+    max_length = 0  # Track the maximum length
+
+    for right in range(len(s)):
+        while s[right] in char_set:
+            # Remove characters from the left until s[right] is not in the set
+            char_set.remove(s[left])
+            left += 1
+        char_set.add(s[right])
+        max_length = max(max_length, right - left + 1)
+
+    return max_length
+
+# Example usage
+print(length_of_longest_substring("abcabcbb"))  # Output: 3
+print(length_of_longest_substring("bbbbb"))     # Output: 1
+print(length_of_longest_substring("pwwkew"))    # Output: 3
